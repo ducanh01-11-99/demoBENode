@@ -8,15 +8,23 @@ async function getOne(uuid){
         [uuid]
     );
 
-    console.log(schoolInfo);
-
-
     if(schoolInfo.length === 0) {
         return [];
     }
     return schoolInfo;
 };
 
+async function getTypeSchool(){
+    const listTypeSchool = await db.query(
+        'SELECT * FROM TypeSchool'
+    );
+
+    if(listTypeSchool.length === 0) {
+        return [];
+    }
+    return listTypeSchool;
+};
+
 module.exports = {
-    getOne
+    getOne, getTypeSchool
 }

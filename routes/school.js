@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {checkNewGuid, isValidUUID, genResponseBody} = require('../helper');
-const { getOne } = require('../services/school.service')
+const { getOne, getTypeSchool } = require('../services/school.service')
 
 
 // lấy thông tin 1 trường
@@ -48,6 +48,17 @@ router.get('/getOne', async function(req, res, next) {
         }
     } catch (err) {
       console.error(`Error while getting user `, err.message);
+      next(err);
+    }
+  });
+
+  // lấy danh sách loại trường
+  router.get('/typeSchool', async function(req, res, next) {
+    try {
+        const list = await getTypeSchool();
+        res.json(genResponseBody(0, list, true));
+    } catch (err) {
+      console.error(`Error while getting  typeSchool`, err.message);
       next(err);
     }
   });

@@ -35,4 +35,15 @@ async function getListWard(idDistrict){
     return wards;
 };
 
-module.exports = {getListProvinces, getListDistrict, getListWard}
+async function getListArea(){
+    const wards = await db.query(
+        'SELECT * FROM Area'
+    );
+
+    if(wards.length === 0) {
+        return [];
+    }
+    return wards;
+};
+
+module.exports = {getListProvinces, getListDistrict, getListWard, getListArea}

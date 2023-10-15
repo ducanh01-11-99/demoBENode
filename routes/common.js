@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {getListProvinces, getListDistrict, getListWard} = require('../services/location.service');
+const {getListProvinces, getListDistrict, getListWard, getListArea} = require('../services/location.service');
 const { genResponseBody } = require('../helper');
 
 router.get('/provinces', async function(req, res, next) {
@@ -42,6 +42,16 @@ router.get('/provinces', async function(req, res, next) {
         res.json(genResponseBody(0, list, true));
     } catch (err) {
       console.error(`Error while getting user `, err.message);
+      next(err);
+    }
+  });
+
+  router.get('/area', async function(req, res, next) {
+    try {
+        const list = await getListArea();
+        res.json(genResponseBody(0, list, true));
+    } catch (err) {
+      console.error(`Error while getting area `, err.message);
       next(err);
     }
   });
