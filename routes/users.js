@@ -15,7 +15,6 @@ router.get('/', async function(req, res, next) {
 router.post('/addUser', async (req, res) => {
   try {
     res.json(await user.addAndEditUser(req.body));
-    console.log(req.headers['accept-language'])
   } catch (err) {
     console.error(`Error while getting user `, err.message);
   }
