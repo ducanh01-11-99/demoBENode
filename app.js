@@ -5,6 +5,7 @@ const userRouter = require("./routes/users");
 const indexRouter = require("./routes/index");
 const indexSchool = require("./routes/school");
 const indexCommon = require("./routes/common");
+const indexSubSchool = require("./routes/subSchool");
 const authentic = require("./middleware/authen");
 
 app.use(authentic.myLogger);
@@ -15,10 +16,12 @@ app.use(
     })
 );
 
+
 app.use("/user", userRouter);
 app.use("/index", indexRouter);
 app.use("/school", indexSchool);
 app.use("/common", indexCommon);
+app.use("/subSchool", indexSubSchool);
 /* Error handler middleware */
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
