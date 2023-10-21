@@ -40,6 +40,8 @@ async function addAndEditSubSchool(data, type) {
     return affectedRows;
 }
 
+// hàm check xem 
+
 module.exports = {
     getAll, getOne, addAndEditSubSchool
 }

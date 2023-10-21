@@ -46,4 +46,26 @@ async function getListArea(){
     return wards;
 };
 
-module.exports = {getListProvinces, getListDistrict, getListWard, getListArea}
+const getYearKey = async() => {
+    const list = await db.query(
+        'SELECT * FROM yearkey ORDER BY nameYear DESC'
+    );
+
+    if(list.length === 0) {
+        return [];
+    }
+    return list;
+}
+
+const getTypeSchool = async() => {
+    const list = await db.query(
+        'SELECT * FROM TypeSchool ORDER BY typeSchoolID DESC'
+    );
+
+    if(list.length === 0) {
+        return [];
+    }
+    return list;
+}
+
+module.exports = {getListProvinces, getListDistrict, getListWard, getListArea, getYearKey, getTypeSchool}
