@@ -1,4 +1,5 @@
 const i18n = require('i18n-node');
+const jwt = require('jsonwebtoken');
 
 const myLogger = function (req, res, next) {
     console.log('LOGGED')
@@ -18,7 +19,24 @@ const checkLanguageMiddleware = (req, res, next) => {
     next();
 };
 
+const verifyToken = (req, res, next) => {
+    const token = req.body.token || req.query.token || req.headers["x-access-token"];
+    if(!token) {
+        return res.status(403).send("A token is required for authentication");
+    }
+    try {
+        var decoded = jwt.verify(token, 'secret');
+        req.user = decoded;
+    } catch (err) {
+        return res.status(401).send("Invalid Token");
+      }
+    return next();
+}
+
+
+
 module.exports = {
     myLogger,
-    checkLanguageMiddleware
+    checkLanguageMiddleware,
+    verifyToken
 }

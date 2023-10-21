@@ -40,11 +40,37 @@ const isValidUUID = (uuid) => {
 
   const genResponseBody = (id, data, isOk) => {
     return {
-        "id" : id,
+        "status" : id,
         "data": data,
         "isOk": isOk
     }
   }
+
+const validateName = (name) => {
+    if(name.length < 3 || name.length > 50) {
+        return "Tên có độ dài từ 3 đến 50 kí tự"
+    }
+    const regex = /^[a-zA-Z0-9\sàáạãảăắằẵặẳâấầẫậẩèéẹẽẻêềếễệểđìíịĩỉòóọõỏôốồỗộổơớờỡợởùúụũủưứừữựửỳýỵỹỷÀÁẠÃẢĂẮẰẴẶẲÂẤẦẪẬẨÈÉẸẼẺÊỀẾỄỆỂĐÌÍỊĨỈÒÓỌÕỎÔỐỒỖỘỔƠỚỜỠỢỞÙÚỤŨỦƯỨỪỮỰỬỲÝỴỸỶ\s]+$/u;
+    if (!regex.test(name)) {
+        return "Tên không đúng định dạng";
+      }  
+      // Nếu tất cả các điều kiện đều thỏa mãn, chuỗi là UUID hợp lệ
+      return "";
+}
+
+const validatePositiveNumber = (number, textValidate) => {
+    if (isNaN(number)) {
+        return textValidate + " không đúng định dạng số";
+      } else {
+        // Không phải số
+        if(number < 0) {
+            return textValidate + "phải là số dương";
+        }
+        return "";
+      }
+}
+
+
 
 module.exports = {
     getOffset,
@@ -52,5 +78,7 @@ module.exports = {
     genGuid,
     checkNewGuid,
     isValidUUID,
-    genResponseBody
+    genResponseBody,
+    validateName,
+    validatePositiveNumber
 }

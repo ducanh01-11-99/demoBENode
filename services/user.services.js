@@ -32,6 +32,21 @@ const addAndEditUser = async (body) => {
     // return helper.genGuid();
 }
 
+const getInfoAccount = async (username) => {
+    const sql =     `SELECT
+    Accounts.id, Accounts.UserName, Accounts.Password, Role.roleName
+  FROM
+    Accounts
+  INNER JOIN
+    Role
+  ON
+    role = Role.id
+  WHERE Accounts.username = ?`;
+  const params = [username]
+  const infoUser = await db.query(sql, params);
+  return infoUser;
+};
+
 module.exports = {
-    getMultiple, addAndEditUser
+    getMultiple, addAndEditUser, getInfoAccount
 }

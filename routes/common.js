@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const {getListProvinces, getListDistrict, getListWard, getListArea} = require('../services/location.service');
 const { genResponseBody } = require('../helper');
+const {verifyToken} = require('../middleware/authen');
 
-router.get('/provinces', async function(req, res, next) {
+router.get('/provinces', verifyToken, async function(req, res, next) {
     try {
         const list = await getListProvinces();
         const data = [];
@@ -14,7 +15,7 @@ router.get('/provinces', async function(req, res, next) {
     }
   });
 
-  router.get('/districts', async function(req, res, next) {
+  router.get('/districts',verifyToken, async function(req, res, next) {
     try {
         let idProvince = req.query.id;
         console.log(idProvince);

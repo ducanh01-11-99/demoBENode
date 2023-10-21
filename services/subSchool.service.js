@@ -1,7 +1,7 @@
+const { genGuid } = require('../helper');
 const db = require('./db');
 
 async function getAll(uuid){
-    console.log(uuid);
     const subSchools = await db.query(
         'SELECT * FROM subSchool where idMainSchool = ?',
         [uuid]
@@ -14,7 +14,6 @@ async function getAll(uuid){
 };
 
 async function getOne(uuid){
-    console.log(uuid);
     const subSchool = await db.query(
         'SELECT * FROM subSchool where objectGuid = ?',
         [uuid]
@@ -26,6 +25,21 @@ async function getOne(uuid){
     return subSchool;
 };
 
+async function addAndEditSubSchool(data, type) {
+    let sql = "";
+    let params = [];
+    // thêm
+    if(type === 1) {
+        sql = "INSERT INTO subSchool (objectGuid, idMainSchool, name, address, distance_to_main_school, phone_number) VALUES (?, ?, ?, ?, ?, ?)";
+        params = [genGuid(), data.idMainSchool, data.name, data.address, data. distance_to_main_school, data.phone_number];
+    } else {
+        sql = "UPDATE subSchool SET name = ?, address = ?, distance_to_main_school = ?, phone_number = ? WHERE objectGuid = ?";
+        params = [data.name, data.address, data.distance_to_main_school, data.phone_number, data.objectGuid];
+    }
+    const affectedRows = await db.query(sql, params);
+    return affectedRows;
+}
+
 module.exports = {
-    getAll, getOne
+    getAll, getOne, addAndEditSubSchool
 }
