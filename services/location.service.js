@@ -2,7 +2,7 @@ const db = require('./db');
 
 async function getListProvinces(){
     const provinces = await db.query(
-        'SELECT * FROM provinces'
+        'SELECT * FROM provinces order by administrative_unit_id'
     );
 
     if(provinces.length === 0) {
@@ -13,7 +13,7 @@ async function getListProvinces(){
 
 async function getListDistrict(idProvince){
     const districts = await db.query(
-        'SELECT * FROM districts where province_code = ?',
+        'SELECT * FROM districts where province_code = ? order by administrative_unit_id',
         [idProvince]
     );
 
@@ -25,7 +25,7 @@ async function getListDistrict(idProvince){
 
 async function getListWard(idDistrict){
     const wards = await db.query(
-        'SELECT * FROM wards where district_code = ?',
+        'SELECT * FROM wards where district_code = ? order by administrative_unit_id',
         [idDistrict]
     );
 

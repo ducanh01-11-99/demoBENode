@@ -12,7 +12,7 @@ const authentic = require("./middleware/authen");
 
 app.use(cors())
  app.listen(80, function () {
-  console.log('CORS-enabled web server listening on port 80')
+  
 })
 
 app.use(authentic.myLogger);

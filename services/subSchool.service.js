@@ -22,7 +22,7 @@ async function getOne(uuid){
     if(subSchool.length === 0) {
         return [];
     }
-    return subSchool;
+    return subSchool[0];
 };
 
 async function addAndEditSubSchool(data, type) {

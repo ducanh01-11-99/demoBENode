@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 const {checkNewGuid, isValidUUID, genResponseBody, isValidName, validateName, validatePositiveNumber} = require('../helper');
 
-const {getAll, getOne, addAndEditSubSchool} = require('../services/subSchool.service')
+const {getAll, getOne, addAndEditSubSchool} = require('../services/subSchool.service');
+
+const {verifyToken} = require('../middleware/authen');
 
 // lấy danh sách trường phụ của 1 trường chính
-router.get('/getAll', async function(req, res, next) {
+router.get('/getAll', verifyToken, async function(req, res, next) {
     try {
         let uuid = req.query.id;
         // check xem có phải uuid hợp lệ hay không?
@@ -29,7 +31,7 @@ router.get('/getAll', async function(req, res, next) {
   });
 
 // lấy thông tin 1 trường
-router.get('/getOne', async function(req, res, next) {
+router.get('/getOne', verifyToken, async function(req, res, next) {
     try {
         let uuid = req.query.id;
         // check xem có phải uuid hợp lệ hay không?
@@ -52,7 +54,7 @@ router.get('/getOne', async function(req, res, next) {
     }
   });
 
-  router.post('/addAndEditSchool', async function(req, res, next) {
+  router.post('/addAndEditSchool', verifyToken, async function(req, res, next) {
     try {
         let body = req.body;
         const objectGuid = body.objectGuid;
@@ -93,8 +95,8 @@ router.get('/getOne', async function(req, res, next) {
 
         // nếu là uuid hợp lệ, 0000 --> là api tạo mới, k thì là api sửa
         if(checkNewGuid(objectGuid)) {
-          const data = addAndEditSubSchool(req.body, 1)
-          if(data > 0) {
+          const data = await addAndEditSubSchool(req.body, 1);
+          if(data.affectedRows > 0) {
             const body = genResponseBody(0, "Thêm mới thành công", false)
             res.json(body);
             return;
@@ -103,8 +105,8 @@ router.get('/getOne', async function(req, res, next) {
           res.json(body);
           return;
         } else {
-          const data = addAndEditSubSchool(req.body, 2)
-          if(data > 0) {
+          const data = await addAndEditSubSchool(req.body, 2);
+          if(data.affectedRows > 0) {
             const body = genResponseBody(0, "Sửa thông tin thành công", false)
             res.json(body);
             return;
