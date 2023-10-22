@@ -25,6 +25,41 @@ async function getOne(uuid){
     return subSchool[0];
 };
 
+async function checkExistName(idMainSchool, name){
+    const subSchool = await db.query(
+        'SELECT * FROM subSchool where idMainSchool = ? and name = ?',
+        [idMainSchool, name]
+    );
+    if(subSchool.length === 0) {
+        return true;
+    }
+    return false;
+};
+
+async function deleteSubSchool(id){
+    const subSchool = await db.query(
+        'DELETE FROM subSchool WHERE objectGuid = ?;',
+        [id]
+    );
+    if(subSchool.length === 0) {
+        return true;
+    }
+    return false;
+};
+
+async function checkDuplicate(id){
+    const subSchool = await db.query(
+        'SELECT * FROM subSchool where objectGuid = ?',
+        [id]
+    );
+    if(subSchool.length === 1) {
+        return true;
+    }
+    return false;
+};
+
+
+
 async function addAndEditSubSchool(data, type) {
     let sql = "";
     let params = [];
@@ -37,11 +72,12 @@ async function addAndEditSubSchool(data, type) {
         params = [data.name, data.address, data.distance_to_main_school, data.phone_number, data.objectGuid];
     }
     const affectedRows = await db.query(sql, params);
+
     return affectedRows;
 }
 
 // hàm check xem 
 
 module.exports = {
-    getAll, getOne, addAndEditSubSchool
+    getAll, getOne, addAndEditSubSchool, checkExistName, checkDuplicate, deleteSubSchool
 }
