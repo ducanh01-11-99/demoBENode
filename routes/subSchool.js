@@ -61,7 +61,6 @@ router.get('/checkExistName', verifyToken, async function(req, res, next) {
       let idMainSchool = req.query.idMainSchool;
       // check xem có phải uuid hợp lệ hay không?
       const data = await checkExistName(idMainSchool, name);
-      console.log(data);
       const body = {
         check: data
       }
@@ -87,7 +86,6 @@ router.get('/checkExistName', verifyToken, async function(req, res, next) {
         if(data) {
           // thực hiện hàm xóa
           const del = await deleteSubSchool(id);
-          console.log('del', del);
           if(del.affectedRows > 0) {
             const body = {
               message: "Xóa điểm trường thành công"

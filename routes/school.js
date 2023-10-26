@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {checkNewGuid, isValidUUID, genResponseBody} = require('../helper');
-const { getOne, getTypeSchool } = require('../services/school.service')
+const { getOne, getTypeSchool, editSchool } = require('../services/school.service')
 
 
 // lấy thông tin 1 trường
@@ -28,11 +28,11 @@ router.get('/getOne', async function(req, res, next) {
     }
   });
 
-  router.get('/addAndEditSchool', async function(req, res, next) {
+  router.post('/EditSchool', async function(req, res, next) {
     try {
-        let uuid = req.query.id;
-        console.log(uuid);
-
+        let body = req.body;
+        const uuid = body.id;
+        console.log(body);
         // check xem có phải uuid hợp lệ hay không?
         if(!isValidUUID(uuid)) {
             const body = genResponseBody(0, "Không đúng định dạng uuid", false)
@@ -40,11 +40,22 @@ router.get('/getOne', async function(req, res, next) {
             return;
         }
 
+        // validate các trường, trả về các lỗi sai tương ứng nếu có
+
         // nếu là uuid hợp lệ, 0000 --> là api tạo mới, k thì là api sửa
         if(checkNewGuid(uuid)) {
             res.send({"body":"Create"})
         } else {
-            res.send({"body":"Edit"});
+          const data = await editSchool(req.body);
+          console.log('data', data);
+          if(data) {
+            const body = genResponseBody(0, "Sửa thông tin thành công", false)
+            res.json(body);
+            return;
+          }
+          const body = genResponseBody(1, "Có lỗi xảy ra, vui lòng thử lại", true)
+          res.json(body);
+          return;
         }
     } catch (err) {
       console.error(`Error while getting user `, err.message);

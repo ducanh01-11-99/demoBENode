@@ -41,10 +41,7 @@ async function deleteSubSchool(id){
         'DELETE FROM subSchool WHERE objectGuid = ?;',
         [id]
     );
-    if(subSchool.length === 0) {
-        return true;
-    }
-    return false;
+    return subSchool;
 };
 
 async function checkDuplicate(id){
