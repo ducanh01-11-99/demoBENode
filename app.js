@@ -9,6 +9,7 @@ const indexCommon = require("./routes/common");
 const indexAuth = require("./routes/auth");
 const indexSubSchool = require("./routes/subSchool");
 const authentic = require("./middleware/authen");
+const indexSchoolYear = require("./routes/schoolYear");
 
 app.use(cors())
  app.listen(80, function () {
@@ -29,6 +30,7 @@ app.use("/school", indexSchool);
 app.use("/common", indexCommon);
 app.use("/subSchool", indexSubSchool);
 app.use("/auth", indexAuth);
+app.use("/schoolYear", indexSchoolYear);
 /* Error handler middleware */
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
