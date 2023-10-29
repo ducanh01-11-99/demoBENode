@@ -13,14 +13,11 @@ const validatePasword = (password) => {
   };
 
 router.post('/login', async (req, res, next ) => {
-    console.log(1);
     const reqBody = req.body;
-    console.log(reqBody);
     const password = reqBody.password;
     try {
         const list = await getInfoAccount(reqBody.username)
         if(list.length !== 1) {
-            console.log(1);
             const body = genResponseBody(1, {data: "Thông tin tài khoản hoặc mật khẩu không chính xác"}, false);
             res.json(body);
             return;
@@ -30,13 +27,10 @@ router.post('/login', async (req, res, next ) => {
 
         const isMatch = await bcrypt.compare(password, infoUser.Password);
         if(!isMatch) {
-            console.log(2);
             const body = genResponseBody(1, {data: "Thông tin tài khoản hoặc mật khẩu không chính xác"}, false);
             res.json(body);
             return;
         }
-
-        console.log(infoUser);
 
         const token = genToken(reqBody.username, infoUser.roleName, 1);
         const body = genResponseBody(0, {"token": token}, true);

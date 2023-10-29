@@ -13,7 +13,6 @@ async function getMultiple(page = 1){
 }
 
 const addAndEditUser = async (body) => {
-    console.log('body', body);
     if(body.objectGuid === "00000000-0000-0000-0000-000000000000") {
         //validate
         if(1 === 1) {

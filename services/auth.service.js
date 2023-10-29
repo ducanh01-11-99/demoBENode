@@ -7,8 +7,6 @@ const genToken = (name, role, sub) => {
       sub: sub,
       exp: new Date().getTime() + 90000000, // 1500 phút
     },'secret');
-
-    console.log(readToken(token));
     return token;
   }
 

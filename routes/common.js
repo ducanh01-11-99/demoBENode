@@ -18,7 +18,6 @@ router.get('/provinces', verifyToken, async function(req, res, next) {
   router.get('/districts',verifyToken, async function(req, res, next) {
     try {
         let idProvince = req.query.id;
-        console.log(idProvince);
         const list = await getListDistrict(idProvince);
         if(list.length == 0) {
             res.json(genResponseBody(1, "Id tỉnh/thành phố không hợp lệ", false));

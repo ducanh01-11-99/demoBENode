@@ -5,7 +5,6 @@ function getOffset(currentPage = 1, listPerPage) {
 }
 
 function emptyOrRows(rows) {
-    console.log('row', rows)
     if (!rows) {
         return [];
     }

@@ -2,7 +2,6 @@ const i18n = require('i18n-node');
 const jwt = require('jsonwebtoken');
 
 const myLogger = function (req, res, next) {
-    console.log('LOGGED')
     next();
 }
 
@@ -12,15 +11,11 @@ const checkLanguageMiddleware = (req, res, next) => {
     // Lấy ngôn ngữ từ header
     const language = req.headers['Accept-Language'];
     i18n.setLocale(language);
-
-    console.log(language)
-
     // Tiếp tục middleware
     next();
 };
 
 const verifyToken = (req, res, next) => {
-    console.log(req.headers);
     const token = req.body.token || req.query.token || req.headers["authorization"];
     if(!token) {
         return res.status(403).send("A token is required for authentication");
