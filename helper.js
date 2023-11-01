@@ -69,6 +69,14 @@ const validatePositiveNumber = (number, textValidate) => {
       }
 }
 
+const convertStringToArr = (str) => {
+    if(str) {
+        let arr = str.split(',');
+        return arr;
+    }
+    return [];
+}
+
 
 
 module.exports = {
@@ -79,5 +87,6 @@ module.exports = {
     isValidUUID,
     genResponseBody,
     validateName,
-    validatePositiveNumber
+    validatePositiveNumber,
+    convertStringToArr
 }

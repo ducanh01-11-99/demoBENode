@@ -30,11 +30,11 @@ async function addAndEditYearSchool(data) {
     // thêm
     if(data.type === 1) {
         sql = "INSERT INTO yearkey (yearkey, nameYear, start_date_hk1, end_date_hk1, start_date_hk2, end_date_hk2) VALUES (?, ?, ?, ?, ?, ?)";
-        params = [data.yearSchool, genSchoolYear(data.yearSchool), data.startDateSemester1, data.startDateSemester1, data.endDateSemester1, data.endDateSemester2];
+        params = [data.yearSchool, genSchoolYear(data.yearSchool), data.startDateSemester1, data.endDateSemester1, data.startDateSemester2, data.endDateSemester2];
     }
     if (data.type === 2) {
         sql = "UPDATE yearkey SET start_date_hk1 = ?, end_date_hk1 = ?, start_date_hk2 = ?, end_date_hk2 = ? WHERE yearkey = ?";
-        params = [data.startDateSemester1, data.startDateSemester1, data.endDateSemester1, data.endDateSemester2, data.yearSchool];
+        params = [data.startDateSemester1, data.endDateSemester1, data.startDateSemester2, data.endDateSemester2, data.yearSchool];
     }
     let affectedRows = 0;
     if(sql != "") {

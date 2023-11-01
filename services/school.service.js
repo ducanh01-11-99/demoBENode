@@ -1,6 +1,14 @@
 const db = require('./db');
 const helper = require('../helper');
 
+async function checkExistCode(code) {
+    const dataSelect = await db.query(
+        'SELECT * FROM School where objectGuid = ?',
+        [code]
+    );
+    return dataSelect.length === 1;
+}
+
 async function getOne(uuid){
     const schoolInfo = await db.query(
         'SELECT * FROM School where objectGuid = ?',
@@ -38,5 +46,5 @@ async function getTypeSchool(){
 };
 
 module.exports = {
-    getOne, getTypeSchool, editSchool
+    getOne, getTypeSchool, editSchool, checkExistCode
 }

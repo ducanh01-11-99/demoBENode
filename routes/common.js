@@ -61,7 +61,7 @@ router.get('/provinces', verifyToken, async function(req, res, next) {
       const list = await getYearKey();
       res.json(genResponseBody(0, list, true));
     } catch (err) {
-      console.error(`Error while getting area `, err.message);
+      console.error(`Error while getting yearkey `, err.message);
       next(err);
     }
   })
