@@ -2,17 +2,60 @@ const express = require('express');
 const router = express.Router();
 const {verifyToken} = require('../middleware/authen');
 const { genResponseBody, convertStringToArr } = require('../helper');
-const { getList, checkExistDepartmentCode, checkExistDepartmentName, addDepartment, updateDepartment } = require('../services/department.service');
+const { getList, checkExistDepartmentCode, checkExistDepartmentName, addDepartment, updateDepartment, checkCanDel, deleteDepartment, getOne, easySearch } = require('../services/department.service');
 
 const { checkExistCode } = require('../services/school.service');
-const { checkExistEmployeeCode } = require('../services/teacher.service');
+const { checkExistEmployeeCode, getAll } = require('../services/teacher.service');
 
-const {checkNewGuid, genGuid} = require('./../helper')
+const {checkNewGuid, genGuid} = require('./../helper');
 
 router.get('/getAll', verifyToken, async function(req, res, next) {
     try {
         let idSchool = req.query.idSchool;
         let data = await getList(idSchool);
+        res.json(genResponseBody(0, data, true));
+    } catch (err) {
+      console.error(`Error while getting user `, err.message);
+      next(err);
+    }
+  });
+
+  router.get('/getOne', verifyToken, async function(req, res, next) {
+    try {
+        let idDepartment = req.query.idDepartment
+        const check = await checkExistDepartmentCode(idDepartment);
+
+        if(!check) {
+            res.json(genResponseBody(1, {data:"Mã Tổ bộ môn không hợp lệ"}, false));
+            return;
+        }
+        let data = [];
+        // kiểm tra mã bộ môn
+        data = await getOne(idDepartment);
+        res.json(genResponseBody(0, data, true));
+    } catch (err) {
+      console.error(`Error while getting user `, err.message);
+      next(err);
+    }
+  });
+
+  router.get('/easySearch', verifyToken, async function(req, res, next) {
+    try {
+        let idSchool = req.query.idSchool;
+        let text = '%' + req.query.textSearch + '%';
+        let data = [];
+
+        // kiểm tra mã trường xem có hợp lệ không
+        const check = await checkExistCode(idSchool);        
+        if(!check) {
+            res.json(genResponseBody(1, {data:"Không có tổ bộ này trong trường"}, false));
+            return;
+        }
+        if(text === "") {
+            data = await getAll(text, idSchool);
+        } else {
+            data = await easySearch(text, idSchool);
+        }
         res.json(genResponseBody(0, data, true));
     } catch (err) {
       console.error(`Error while getting user `, err.message);
@@ -29,7 +72,7 @@ router.get('/getAll', verifyToken, async function(req, res, next) {
         const dataUpdate = {
             name: body.name,
             description: body.description,
-            manager: convertStringToArr(body.manager.toString()),
+            manager: body.manager,
             idSchool: body.idSchool
         }
 
@@ -43,12 +86,8 @@ router.get('/getAll', verifyToken, async function(req, res, next) {
         }
 
         // kiểm tra mã giáo viên
-        const managerList = convertStringToArr(body.manager.toString());
-        let checkEmployeeId = true;
-        managerList.map(async item=>{
-            const checkElement = await checkExistEmployeeCode(item);
-            checkEmployeeId = checkEmployeeId && checkElement;
-        });
+        let checkEmployeeId = await checkExistEmployeeCode(body.manager);
+
 
         if(!checkEmployeeId) {
             res.json(genResponseBody(1, {data:"Mã cán bộ quản lý không hợp lệ"}, false));
@@ -66,7 +105,6 @@ router.get('/getAll', verifyToken, async function(req, res, next) {
             } else {
                 dataUpdate.uuid = genGuid();
                 const dataResponse = await addDepartment(dataUpdate, 1);
-                console.log(dataResponse);
                 if(dataResponse.affectedRows > 0) {
                     res.json(genResponseBody(0, {data:"Thêm tổ bộ môn thành công"}, true));
                     return;
@@ -78,8 +116,7 @@ router.get('/getAll', verifyToken, async function(req, res, next) {
         } else {
             //false -> lệnh cập nhật
             // kiểm tra đã có uuid trong hệ thống
-            // let checkExistCode = await checkExistDepartmentCode(body.uuid);
-            let checkExistCode = true;
+            let checkExistCode = await checkExistDepartmentCode(body.uuid);
             if(!checkExistCode) {
                 res.json(genResponseBody(1, {data: "Không tồn tại bộ môn có mã này"}, false));
                 return;
@@ -97,6 +134,39 @@ router.get('/getAll', verifyToken, async function(req, res, next) {
         }
     } catch (err) {
       console.error(`Error while getting department `, err.message);
+      next(err);
+    }
+  });
+
+  router.get('/delete', verifyToken, async function(req, res, next) {
+    try {
+        let idDepartment = req.query.id;
+        // check xem có id này k
+        let checkExistID = await checkExistDepartmentCode(idDepartment);
+        if(!checkExistID) {
+            res.json(genResponseBody(1, {data: "Không tồn tại bộ môn có mã này"}, false));
+            return;
+        }
+        let check = await checkCanDel(idDepartment);
+        if(check) {
+            // có thể xóa
+            let checkDel = await deleteDepartment(idDepartment);
+            if(checkDel) {
+                res.json(genResponseBody(0, {data: "Đã xóa thành công tổ bộ môn"}, true));
+                return;
+            }
+            res.json(genResponseBody(0, {data: "Có lỗi xảy ra"}, true));
+
+        } else {
+            res.json(genResponseBody(1, {data: "Bạn không thể xóa tổ bộ môn này"}, true));
+            return;
+        }
+
+        // Kiểm tra xem có được xóa k? 
+        let data = await getList(idSchool);
+       
+    } catch (err) {
+      console.error(`Error while getting user `, err.message);
       next(err);
     }
   });
