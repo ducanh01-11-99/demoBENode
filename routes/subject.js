@@ -10,7 +10,6 @@ const { getList } = require('../services/subject.service')
         const yearkey = req.query.yearkey;
         const block = req.query.block;
         const list = await getList(yearkey, block);
-        console.log(yearkey, block);
     //   const list = await getTypeSchool();
       res.json(genResponseBody(0, list, true));
     } catch (err) {
@@ -26,7 +25,6 @@ const { getList } = require('../services/subject.service')
         const block = req.query.block;
         const data = req.body.data;
         // const list = await getList(yearkey, block);
-        console.log(yearkey, block, data);
     //   const list = await getTypeSchool();
       res.json(genResponseBody(0, yearkey, true));
     } catch (err) {

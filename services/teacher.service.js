@@ -41,7 +41,7 @@ async function gitListTDDT() {
 // lấy danh sách công việc
 async function getListWorkType() {
     const dataSelect = await db.query(
-        'select * from trinh_do_dao_tao where trinh_do_status = 0;'
+        'select * from employee_work where employee_work_status = 0;'
     );
     return dataSelect;
 }

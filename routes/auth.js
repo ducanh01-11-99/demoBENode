@@ -16,7 +16,6 @@ router.post('/login', async (req, res, next ) => {
     const reqBody = req.body;
     const password = reqBody.password;
     const hashedPassword = bcrypt.hashSync(password, 10);
-    console.log('hashedPassword', hashedPassword);
     try {
         const list = await getInfoAccount(reqBody.username)
         if(list.length !== 1) {

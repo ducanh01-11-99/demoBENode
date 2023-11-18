@@ -32,7 +32,6 @@ router.get('/getOne', async function(req, res, next) {
     try {
         let body = req.body;
         const uuid = body.id;
-        console.log(body);
         // check xem có phải uuid hợp lệ hay không?
         if(!isValidUUID(uuid)) {
             const body = genResponseBody(0, "Không đúng định dạng uuid", false)
@@ -47,7 +46,6 @@ router.get('/getOne', async function(req, res, next) {
             res.send({"body":"Create"})
         } else {
           const data = await editSchool(req.body);
-          console.log('data', data);
           if(data) {
             const body = genResponseBody(0, "Sửa thông tin thành công", false)
             res.json(body);

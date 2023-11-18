@@ -26,9 +26,6 @@ async function editSchool(data){
         sql = "UPDATE School SET Email = ?, DiaChi = ?, website = ?, DienThoaiLienHe = ?, create_date = ? WHERE objectGuid = ?",
         params = [data.email, data.address, data.website, data.phone, data.createDate, data.id],
     );
-
-    console.log(schoolInfo);
-
     return schoolInfo;
 };
 
