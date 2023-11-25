@@ -63,11 +63,11 @@ async function addAndEditSubSchool(data, type) {
     let params = [];
     // thêm
     if(type === 1) {
-        sql = "INSERT INTO truong_phu (truong_phu_id, truong_chinh_id, ten_truong_phu, dia_chi, khoang_cach_den_diem_chinh, so_dien_thoai) VALUES (?, ?, ?, ?, ?, ?)";
-        params = [genGuid(), data.idMainSchool, data.name, data.address, data. distance_to_main_school, data.phone_number];
+        sql = "INSERT INTO truong_phu (truong_phu_id, truong_chinh_id, ten_truong_phu, dia_chi, khoang_cach_den_diem_chinh, so_dien_thoai, phuong_tien) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        params = [genGuid(), data.idMainSchool, data.name, data.address, data. distance_to_main_school, data.phone_number, data.transportation];
     } else {
-        sql = "UPDATE truong_phu SET ten_truong_phu = ?, dia_chi = ?, khoang_cach_den_diem_chinh = ?, so_dien_thoai = ? WHERE truong_phu_id = ?";
-        params = [data.name, data.address, data.distance_to_main_school, data.phone_number, data.objectGuid];
+        sql = "UPDATE truong_phu SET ten_truong_phu = ?, dia_chi = ?, khoang_cach_den_diem_chinh = ?, so_dien_thoai = ?, phuong_tien = ? WHERE truong_phu_id = ?";
+        params = [data.name, data.address, data.distance_to_main_school, data.phone_number,data.transportation, data.objectGuid];
     }
     const affectedRows = await db.query(sql, params);
     return affectedRows;
