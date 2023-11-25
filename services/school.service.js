@@ -3,7 +3,7 @@ const helper = require('../helper');
 
 async function checkExistCode(code) {
     const dataSelect = await db.query(
-        'SELECT * FROM School where objectGuid = ?',
+        'SELECT * FROM school where truong_hoc_uuid = ?',
         [code]
     );
     return dataSelect.length === 1;
@@ -11,7 +11,7 @@ async function checkExistCode(code) {
 
 async function getOne(uuid){
     const schoolInfo = await db.query(
-        'SELECT * FROM School where objectGuid = ?',
+        'SELECT * FROM school where truong_hoc_uuid = ?',
         [uuid]
     );
 
@@ -23,7 +23,7 @@ async function getOne(uuid){
 
 async function editSchool(data){
     const schoolInfo = await db.query(
-        sql = "UPDATE School SET Email = ?, DiaChi = ?, website = ?, DienThoaiLienHe = ?, create_date = ? WHERE objectGuid = ?",
+        sql = "UPDATE school SET email = ?, dia_chi = ?, website = ?, so_dien_thoai = ?, ngay_thanh_lap = ? WHERE truong_hoc_uuid = ?",
         params = [data.email, data.address, data.website, data.phone, data.createDate, data.id],
     );
     return schoolInfo;

@@ -17,6 +17,7 @@ router.post('/login', async (req, res, next ) => {
     const password = reqBody.password;
     const hashedPassword = bcrypt.hashSync(password, 10);
     try {
+        console.log(1);
         const list = await getInfoAccount(reqBody.username)
         if(list.length !== 1) {
             const body = genResponseBody(1, {data: "Thông tin tài khoản hoặc mật khẩu không chính xác"}, false);
@@ -26,7 +27,7 @@ router.post('/login', async (req, res, next ) => {
 
         const infoUser = list[0];
 
-        const isMatch = await bcrypt.compare(password, infoUser.Password);
+        const isMatch = await bcrypt.compare(password, infoUser.password);
         if(!isMatch) {
             const body = genResponseBody(1, {data: "Thông tin tài khoản hoặc mật khẩu không chính xác"}, false);
             res.json(body);
@@ -38,6 +39,7 @@ router.post('/login', async (req, res, next ) => {
         res.json(body);
     }
     catch (err) {
+        console.log(err);
         const body = genResponseBody(1, {data: "Đã có lỗi xảy ra, vui lòng thử lại sau"}, false);
         res.json(body);
         return;

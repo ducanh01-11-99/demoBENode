@@ -3,7 +3,7 @@ const router = express.Router();
 const {verifyToken} = require('../middleware/authen');
 const {getAll, gitListTDDT, getListWorkType, getListContractType, filterEmployee} = require('../services/teacher.service');
 const {checkExistInTable} = require('../services/common.service');
-const {checkNewGuid, isValidUUID, genResponseBody, isValidName, validateName, validatePositiveNumber} = require('../helper');
+const {isValidUUID, genResponseBody} = require('../helper');
 
 router.get('/getAll', verifyToken, async function(req, res, next) {
     try {

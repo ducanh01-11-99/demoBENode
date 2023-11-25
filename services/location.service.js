@@ -37,7 +37,7 @@ async function getListWard(idDistrict){
 
 async function getListArea(){
     const wards = await db.query(
-        'SELECT * FROM Area'
+        'SELECT * FROM area'
     );
 
     if(wards.length === 0) {
@@ -48,7 +48,7 @@ async function getListArea(){
 
 const getYearKey = async() => {
     const list = await db.query(
-        'SELECT * FROM yearkey ORDER BY nameYear DESC'
+        'SELECT * FROM nam_hoc ORDER BY ma_nam_hoc DESC'
     );
 
     if(list.length === 0) {
@@ -59,7 +59,7 @@ const getYearKey = async() => {
 
 const getTypeSchool = async() => {
     const list = await db.query(
-        'SELECT * FROM TypeSchool ORDER BY typeSchoolID DESC'
+        'SELECT * FROM loai_truong ORDER BY loai_truong_id DESC'
     );
 
     if(list.length === 0) {

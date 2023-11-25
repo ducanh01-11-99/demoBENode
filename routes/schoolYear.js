@@ -7,6 +7,7 @@ const {verifyToken} = require('../middleware/authen');
   router.post('/addNew', verifyToken, async function(req, res, next) {
     try {
         let body = req.body;
+        console.log(body);
         // kiểm tra xem đã tồn tại năm học này hay chưa
         const existName = await checkExistYear(body.yearSchool);
         // thực hiện thêm năm học

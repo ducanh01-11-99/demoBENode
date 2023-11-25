@@ -33,16 +33,17 @@ const addAndEditUser = async (body) => {
 
 const getInfoAccount = async (username) => {
     const sql =     `SELECT
-    Accounts.id, Accounts.UserName, Accounts.Password, Role.roleName
+    account.id, account.user_name, account.password, role.role_name
   FROM
-    Accounts
+  account
   INNER JOIN
-    Role
+    role
   ON
-    role = Role.id
-  WHERE Accounts.username = ?`;
+    role = role.uuid
+  WHERE account.user_name = ?`;
   const params = [username]
   const infoUser = await db.query(sql, params);
+  console.log(infoUser);
   return infoUser;
 };
 

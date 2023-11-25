@@ -7,7 +7,6 @@ const {verifyToken} = require('../middleware/authen');
 router.get('/provinces', verifyToken, async function(req, res, next) {
     try {
         const list = await getListProvinces();
-        const data = [];
         res.json(genResponseBody(0, list, true));
     } catch (err) {
       console.error(`Error while getting user `, err.message);
