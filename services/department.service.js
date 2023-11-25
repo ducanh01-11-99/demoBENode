@@ -3,7 +3,7 @@ const helper = require('../helper');
 
 async function getList(idSchool){
     const dataResponse = await db.query(
-        'SELECT * FROM department JOIN employee ON department.manager = employee.employee_id where department.id_school = ?;',
+        'SELECT * FROM to_bo_mon JOIN nhan_vien ON to_bo_mon.cb_quan_ly = nhan_vien.ma_nhan_vien where to_bo_mon.ma_truong = ?;',
         [idSchool]
     );
 
@@ -12,7 +12,7 @@ async function getList(idSchool){
 
 async function getOne(idDepartment){
     const dataResponse = await db.query(
-        'SELECT * FROM department JOIN employee ON department.manager = employee.employee_id where department.uuid = ?;',
+        'SELECT * FROM to_bo_mon JOIN nhan_vien ON to_bo_mon.cb_quan_ly = nhan_vien.ma_nhan_vien where to_bo_mon.to_bo_mon_id = ?;',
         [idDepartment]
     );
     return dataResponse;
@@ -20,7 +20,7 @@ async function getOne(idDepartment){
 
 async function easySearch(text, idSchool){
     const dataResponse = await db.query(
-        'SELECT * FROM department JOIN employee ON department.manager = employee.employee_id where (employee.employee_name LIKE ?  or department.name like ? ) and department.id_school = ?;',
+        'SELECT * FROM to_bo_mon JOIN nhan_vien ON to_bo_mon.cb_quan_ly = nhan_vien.ma_nhan_vien where (nhan_vien.ten_nhan_vien LIKE ?  or to_bo_mon.ten_to_bo_mon like ? ) and to_bo_mon.ma_truong = ?;',
         [text, text, idSchool]
     );
     return dataResponse;
@@ -28,7 +28,7 @@ async function easySearch(text, idSchool){
 
 async function checkExistDepartmentCode(uuid){
     const dataResponse = await db.query(
-        'SELECT * FROM department where uuid = ?',
+        'SELECT * FROM to_bo_mon where to_bo_mon_id = ?',
         [uuid]
     );
     return dataResponse.length > 0;
@@ -36,7 +36,7 @@ async function checkExistDepartmentCode(uuid){
 
 async function checkExistDepartmentName(name){
     const dataResponse = await db.query(
-        'SELECT * FROM department where name = ?',
+        'SELECT * FROM to_bo_mon where ten_to_bo_mon = ?',
         [name]
     );
     return dataResponse.length !== 0;
@@ -46,11 +46,11 @@ async function addDepartment(body, type){
     let query = '';
     let value = [];
     if(type === 1) {
-        query = 'insert into department (uuid, name, description, manager, status, id_school) value (?, ?, ?, ?, ?, ?);';
+        query = 'insert into to_bo_mon (to_bo_mon_id, ten_to_bo_mon, mo_ta, cb_quan_ly, trang_thai_to_bo_mon, ma_truong) value (?, ?, ?, ?, ?, ?);';
         value =  [body.uuid, body.name, body.description, body.manager, 1, body.idSchool]
     }
     if(type === 2) {
-        query = 'update department set name = ?, description = ?, manager = ? where uuid = ?;';
+        query = 'update to_bo_mon set ten_to_bo_mon = ?, mo_ta = ?, cb_quan_ly = ? where to_bo_mon_id = ?;';
         value = [body.name, body.description, body.manager, body.uuid]
     }
     const dataResponse = await db.query(query, value);
@@ -60,7 +60,7 @@ async function addDepartment(body, type){
 async function updateDepartment(body){
     let manager = body.manager;
     const dataResponse = await db.query(
-        'update department set name = ?, description = ?, manager = ?, status = 1 where uuid = ?;'
+        'update to_bo_mon set ten_to_bo_mon = ?, mo_ta = ?, cb_quan_ly = ?, trang_thai_to_bo_mon = 1 where to_bo_mon_id = ?;'
         [body.name, body.description, manager, body.uuid]
     );
     return dataResponse;
@@ -68,11 +68,11 @@ async function updateDepartment(body){
 
 async function checkCanDel(id){
     const dataResponse = await db.query(
-        'select status from department where uuid = ?;',
+        'select trang_thai_to_bo_mon from to_bo_mon where to_bo_mon_id = ?;',
         [id]
     );
     // có thể xóa
-    if(dataResponse[0].status === 0) {
+    if(dataResponse[0].trang_thai_to_bo_mon === 0) {
         return true;
     }
     return false;
@@ -80,7 +80,7 @@ async function checkCanDel(id){
 
 async function deleteDepartment(id){
     const dataResponse = await db.query(
-        'DELETE from department where uuid = ?;',
+        'DELETE from to_bo_mon where to_bo_mon_id = ?;',
         [id]
     );
     // có thể xóa

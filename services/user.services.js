@@ -43,7 +43,6 @@ const getInfoAccount = async (username) => {
   WHERE account.user_name = ?`;
   const params = [username]
   const infoUser = await db.query(sql, params);
-  console.log(infoUser);
   return infoUser;
 };
 
