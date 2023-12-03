@@ -72,7 +72,7 @@ async function checkCanDel(id){
         [id]
     );
     // có thể xóa
-    if(dataResponse[0].trang_thai_to_bo_mon === 0) {
+    if(dataResponse[0].trang_thai_to_bo_mon !== 0) {
         return true;
     }
     return false;

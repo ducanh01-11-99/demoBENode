@@ -62,9 +62,9 @@ const addLikeChar = (name) => {
 const filterEmployee = async (body) => {
     let dataSelect = [];
     const idDepartment = addLikeChar(body.idDepartment);
-    const gender = addLikeChar(body.gender === '-1' ? "" : body.gender);
+    const gender = addLikeChar(body.gender === -1 ? "" : body.gender);
     const work = addLikeChar(body.work);
-    const status = addLikeChar(body.status === "-1" ? "" : body.status);
+    const status = addLikeChar(body.status === -1 ? "" : body.status);
     const employeeID = addLikeChar(body.employeeID);
     const name = addLikeChar(body.name);
     const contractType = addLikeChar(body.contractType);
@@ -81,7 +81,18 @@ const filterEmployee = async (body) => {
     return dataSelect;
 }
 
+const checkExistMaCanBo = async (mcb) => {
+    const sql =  `SELECT * from nhan_vien where ma_so_nhan_vien = ?`;
+    const params = [mcb];
+    const list = await db.query(sql, params);
+    console.log('list', list);
+    if(list.length > 0) {
+        return true;
+    } return false;
+
+}
 
 
 
-module.exports = {checkExistEmployeeCode, getAll, getNameByID, gitListTDDT, getListContractType, filterEmployee, getListWorkType}
+
+module.exports = {checkExistEmployeeCode, getAll, getNameByID, gitListTDDT, getListContractType, filterEmployee, getListWorkType, checkExistMaCanBo}

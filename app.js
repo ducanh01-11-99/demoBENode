@@ -13,7 +13,13 @@ const indexSubSchool = require("./routes/subSchool");
 const authentic = require("./middleware/authen");
 const indexSchoolYear = require("./routes/schoolYear");
 const indexDepartment = require("./routes/department");
-
+var i18n = require("i18n");
+i18n.configure({
+    locales:['en', 'vi'],
+    directory: __dirname + '/locales',
+   cookie: 'lang',
+   });
+app.use(i18n.init);
 
 app.use(cors())
  app.listen(80, function () {

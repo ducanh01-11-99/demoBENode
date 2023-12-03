@@ -33,19 +33,29 @@ const addAndEditUser = async (body) => {
 
 const getInfoAccount = async (username) => {
     const sql =     `SELECT
-    account.id, account.user_name, account.password, role.role_name
+    *
   FROM
-  account
-  INNER JOIN
+  tai_khoan
+  LEFT JOIN
     role
   ON
-    role = role.uuid
-  WHERE account.user_name = ?`;
+  phan_quyen = role.uuid JOIN nhan_vien ON nhan_vien = nhan_vien.ma_nhan_vien
+  WHERE tai_khoan.ten_dang_nhap = ?`;
   const params = [username]
   const infoUser = await db.query(sql, params);
   return infoUser;
 };
 
+const checkExistMaCanBo = async (mcb) => {
+    const sql =  `SELECT * from nhan_vien where ma_so_nhan_vien = ?`;
+    const params = [mcb];
+    const list = await db.query(sql, params);
+    if(list.length > 0) {
+        return false;
+    } return true;
+
+}
+
 module.exports = {
-    getMultiple, addAndEditUser, getInfoAccount
+    getMultiple, addAndEditUser, getInfoAccount, checkExistMaCanBo
 }

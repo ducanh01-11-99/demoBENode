@@ -26,15 +26,21 @@ router.post('/login', async (req, res, next ) => {
 
         const infoUser = list[0];
 
-        const isMatch = await bcrypt.compare(password, infoUser.password);
+        const isMatch = await bcrypt.compare(password, infoUser.mat_khau);
         if(!isMatch) {
             const body = genResponseBody(1, {data: "Thông tin tài khoản hoặc mật khẩu không chính xác"}, false);
             res.json(body);
             return;
         }
 
-        const token = genToken(reqBody.username, infoUser.roleName, 1);
-        const body = genResponseBody(0, {"token": token}, true);
+        const token = genToken(reqBody.username, infoUser.role_name, 1);
+        const  bodyData = {
+            account: infoUser.ten_dang_nhap,
+            fullName: infoUser.ten_nhan_vien,
+            id: infoUser.id,
+            token: token
+        }
+        const body = genResponseBody(0, bodyData, true);
         res.json(body);
     }
     catch (err) {

@@ -16,5 +16,5 @@ const readToken = (token) => {
 }  
 
 module.exports = {
-    genToken
+    genToken, readToken
 }

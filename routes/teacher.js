@@ -4,6 +4,8 @@ const {verifyToken} = require('../middleware/authen');
 const {getAll, gitListTDDT, getListWorkType, getListContractType, filterEmployee} = require('../services/teacher.service');
 const {checkExistInTable} = require('../services/common.service');
 const {isValidUUID, genResponseBody} = require('../helper');
+const jwt = require('jsonwebtoken');
+const {addAndEditEmployee} = require('../controller/teacherController');
 
 router.get('/getAll', verifyToken, async function(req, res, next) {
     try {
@@ -67,8 +69,8 @@ router.get('/work-type', verifyToken, async function(req, res, next) {
 
 router.post('/filter', verifyToken, async function(req, res, next) {
     try {
-    
-        console.log(req.body)
+        // const token = req.headers["authorization"]
+        // var decoded = readToken(token);
         const idDepartment = req.body.idDepartment;
         const gender = req.body.gender;
         const idWork = req.body.work;
@@ -80,7 +82,7 @@ router.post('/filter', verifyToken, async function(req, res, next) {
         if(idDepartment !== '') {
             // kiểm tra xem có là 1 uuid hợp lệ không?
             if(isValidUUID(idDepartment)) {
-                const checkMessage = await checkExistInTable(idDepartment, "department", "uuid", "Tổ bộ môn");
+                const checkMessage = await checkExistInTable(idDepartment, "to_bo_mon", "to_bo_mon_id", "Tổ bộ môn");
                 if(checkMessage.length > 0) {
                     res.json(genResponseBody(1, {"data": checkMessage}, true));
                     return;
@@ -92,16 +94,16 @@ router.post('/filter', verifyToken, async function(req, res, next) {
         }
         
         // Check giới tính
-        if(!(gender === "0" || gender === "1" || gender === "-1")) {
+        if(!(gender === 0 || gender === 1 || gender === -1)) {
             // giới tính truyền vào không hợp lệ
             res.json(genResponseBody(1, {"data": "Giới tính không hợp lệ"}, true));
             return;
         }
 
         // Check trạng thái
-        if(!(status === "0" || status === "1" || status ==="-1")) {
+        if(!(status === 0 || status === 1 || status ===-1)) {
             // trạng thái truyền vào không hợp lệ
-            res.json(genResponseBody(1, {"data": "Giới tính không hợp lệ"}, true));
+            res.json(genResponseBody(1, {"data": "Trangj thai không hợp lệ"}, true));
             return;
         }
 
@@ -165,6 +167,15 @@ router.post('/filter', verifyToken, async function(req, res, next) {
         next(error);
     }
 
+});
+
+router.post('/addAndEdit', verifyToken, async function(req, res, next) {
+    const result =  await addAndEditEmployee(req);
+    if(result === '') {
+        res.json(genResponseBody(0, {"data": result}, true));
+    } else {
+        res.json(genResponseBody(0, {"data": result}, true));
+    }
 })
 
 
