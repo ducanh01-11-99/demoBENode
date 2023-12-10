@@ -3,16 +3,22 @@ const helper = require('../helper');
 
 // kiểm tra 1 id có tồn tại trong bảng hay không
 const checkExistInTable = async (uuid, nameTable, nameColumn, mesage) => {
-    const dataResponse = await db.query(
-        `SELECT * FROM ${nameTable} where ${nameColumn} = ?`,
-        [uuid]
-    );
-
-    if(dataResponse.length === 0) {
-        return mesage + " không tồn tại trong hệ thống !";
+    console.log(uuid, nameTable, nameColumn, mesage);
+    try {
+        const dataResponse = await db.query(
+            `SELECT * FROM ${nameTable} where ${nameColumn} = ?`,
+            [uuid]
+        );
+    
+        if(dataResponse.length === 0) {
+            return mesage + " không tồn tại trong hệ thống !";
+        }
+    
+        return "";
     }
-
-    return "";
+    catch (err) {
+        console.log(err);
+    }
 }
 
 
@@ -70,4 +76,17 @@ const checkDanToc = async (dantocID) => {
     return true;
 }
 
-module.exports = {checkExistInTable, checkExistProvinces, checkTonGiao, checkDanToc};
+// Đặt lại mật khẩu
+const resetPasswordService = async(id) => {
+    const dataResponse = await db.query(
+        `UPDATE tai_khoan set mat_khau = '$2b$10$wzmBMPshJs0ZYL0BiLT8O.TeiTAL6sLCqgeLBjRBPdSlVMEQj5.Xq' where nhan_vien = ?`,
+        [id]
+    );
+    if(dataResponse.affectedRows > 0) {
+        console.log("12312");
+        return 0;
+    }
+    return 1;
+}
+
+module.exports = {checkExistInTable, checkExistProvinces, checkTonGiao, checkDanToc, resetPasswordService};

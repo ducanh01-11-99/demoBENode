@@ -2,7 +2,9 @@ const { validatePhone, validateEmail, validateText, validateUsername, valdiateCC
 
 const {checkExistMaCanBo, checkToBoMon, addAndEdit, checkUsername, editEmployeService} = require("../services/teacher.service");
 
-const {checkExistProvinces, checkTonGiao, checkDanToc, checkExistInTable} = require("../services/common.service");
+const {checkExistProvinces, checkTonGiao, checkDanToc, checkExistInTable, resetPasswordService} = require("../services/common.service");
+
+// const {sendMail} = require("../services/emailService");
 
 const addEmployee = async (req) => {
     const dataPost = req.body;
@@ -173,10 +175,26 @@ const editEmployee = async (dataPut) => {
 
 const regexWithoutHyphen = /[!@#$%^&*()_+]/;
 
-const resetPassword = async (req) => {
-    const dataPost = req.body;
-    console.log('dataPost', dataPost);
-    return '';
+const resetPassword = async (id) => {
+    if(!id) return "Mã cán bộ không được để trống";
+
+    // check id có trong bảng hay không?
+    const checkExist = await checkExistInTable(id, "tai_khoan", "nhan_vien", "Tài khoản");
+    if(checkExist !== "" ) return checkExist;
+
+    const resetResult = await resetPasswordService(id);
+    console.log("resetResult", resetResult);
+
+    // 
+    // Gui mail dae lai sau
+    // try {
+    //     sendMail('ducanh20176919@gmail.com', 'CAP LAI MAT KHAU', 'Mat khau moi: 12345678');
+    // } catch (error) {
+    //     console.log(error);
+    // }
+
+    
+    return resetResult;
 }
 
 module.exports = {

@@ -5,7 +5,7 @@ const {getAll, gitListTDDT, getListWorkType, getListContractType, filterEmployee
 const {checkExistInTable} = require('../services/common.service');
 const {isValidUUID, genResponseBody} = require('../helper');
 const jwt = require('jsonwebtoken');
-const {addEmployee, editEmployee} = require('../controller/teacherController');
+const {addEmployee, editEmployee, resetPassword} = require('../controller/teacherController');
 
 router.get('/getAll', verifyToken, async function(req, res, next) {
     try {
@@ -186,6 +186,17 @@ router.put('/edit-employee', verifyToken, async function(req, res, next) {
         res.json(genResponseBody(0, {"data": result}, true));
     } else {
         res.json(genResponseBody(1, {"data": result}, false));
+    }
+});
+
+router.get('/reset-password', verifyToken,async (req, res, next) => {
+    const id = req.query.id;
+    const result = await resetPassword(id);
+    console.log('chekc', result);
+    if(result === 0) {
+        res.json(genResponseBody(0, {"data": "Đặt lại mật khẩu thành công"}, true));
+    } else {
+        res.json(genResponseBody(1, {"data": "Có lỗi xảy ra"}, false));
     }
 })
 
