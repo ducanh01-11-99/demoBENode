@@ -4,6 +4,8 @@ const {getListProvinces, getListDistrict, getListWard, getListArea, getYearKey, 
 const { genResponseBody } = require('../helper');
 const {verifyToken} = require('../middleware/authen');
 
+const {getListNation} = require('../services/common.service');
+
 router.get('/provinces', verifyToken, async function(req, res, next) {
     try {
         const list = await getListProvinces();
@@ -74,6 +76,28 @@ router.get('/provinces', verifyToken, async function(req, res, next) {
       console.error(`Error while getting area `, err.message);
       next(err);
     }
+  });
+
+   router.get('/typeschool', verifyToken, async (req, res, next) => {
+    try {
+      const list = await getTypeSchool();
+      res.json(genResponseBody(0, list, true));
+    } catch (err) {
+      console.error(`Error while getting area `, err.message);
+      next(err);
+    }
   })
+
+     // Láy danh sách Loại trường
+     router.get('/dan-toc', verifyToken, async (req, res, next) => {
+      try {
+        console.log(1);
+        const list = await getListNation();
+        res.json(genResponseBody(0, list, true));
+      } catch (err) {
+        console.error(`Error while getting list nation `, err.message);
+        next(err);
+      }
+    })
 
   module.exports = router;

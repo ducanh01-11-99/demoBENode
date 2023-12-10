@@ -89,4 +89,12 @@ const resetPasswordService = async(id) => {
     return 1;
 }
 
-module.exports = {checkExistInTable, checkExistProvinces, checkTonGiao, checkDanToc, resetPasswordService};
+// Đặt lại mật khẩu
+const getListNation = async() => {
+    const dataResponse = await db.query(
+        `SELECT id, code, name from danh_muc_dan_toc`
+    );
+    return dataResponse;
+}
+
+module.exports = {checkExistInTable, checkExistProvinces, checkTonGiao, checkDanToc, resetPasswordService, getListNation};
