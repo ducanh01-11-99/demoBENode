@@ -7,6 +7,6 @@ const config = {
         database: "demo",
         // insecureAuth : true
     },
-    listPerPage: 10,
+    // listPerPage: 10,
 };
 module.exports = config;

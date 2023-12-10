@@ -20,6 +20,6 @@ const validatePasword = (password) => {
         response.status(400).json({ error: "Password không đúng!!!" });
       }
     } else {
-        response.status(401).json({ error: "Email không đúng!!!" });
+        response.status(400).json({ error: "Email không đúng!!!" });
     }
 }  

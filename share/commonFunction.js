@@ -69,11 +69,20 @@ const validateEmail = (email, isRequired) => {
     The username can contain only letters, digits, underscores, hyphens, and periods.
     The username ends with a letter or digit.
 */
-const validateUsername = username => {
+const checkRegexUserName = username => {
     const regex = /^[a-zA-Z0-9_.-]+$/;
     return regex.test(username);
   }
 
+  const validateUsername = username => {
+    if(!username) {
+        return "Tên đăng nhập không được để trống";
+    }
+    if(!checkRegexUserName(username)) {
+        return "Tên đăng nhập không hợp lệ";
+    }
+    return "";
+  }
 /*
     The password contains at least one lowercase letter.
     The password contains at least one uppercase letter.
@@ -86,24 +95,24 @@ const validatePassword = password => {
     return regex.test(password);
   }
 
-  function validateCCCDOrCMND(cccdOrCMND) {
+  function regexCCCDOrCMND(cccdOrCMND) {
     // Kiểm tra số CCCD hoặc CMND
     const regexCCCD = /^[0-9]{9,12}$/;
     if (!regexCCCD.test(cccdOrCMND)) {
       return false;
     }
   
-    // Kiểm tra ngày tháng năm sinh
-    const date = new Date(cccdOrCMND.substring(0, 6));
-    if (date.getFullYear() < 1900 || date.getFullYear() > 2100) {
-      return false;
-    }
+    // // Kiểm tra ngày tháng năm sinh
+    // const date = new Date(cccdOrCMND.substring(0, 6));
+    // if (date.getFullYear() < 1900 || date.getFullYear() > 2100) {
+    //   return false;
+    // }
   
-    // Kiểm tra giới tính
-    const gender = cccdOrCMND.substring(6, 7);
-    if (gender != "1" && gender != "2") {
-      return false;
-    }
+    // // Kiểm tra giới tính
+    // const gender = cccdOrCMND.substring(6, 7);
+    // if (gender != "1" && gender != "2") {
+    //   return false;
+    // }
   
     // // Kiểm tra nguyên quán
     // const regex = /^[a-zA-Z0-9\-\s]+$/;
@@ -126,12 +135,26 @@ const validatePassword = password => {
     return true;
   }
 
+  const valdiateCCCD = cccd => {
+    if(!cccd) {
+        return "Căn cước công dân không được để trống";
+    }
+    if(!regexCCCDOrCMND(cccd)) {
+        return "Căn cước công dân không hợp lệ";
+    }
+    return "";
+  }
+
 
 // Kiểm tra có phải ngày trong tương lai hay không
 const isFutureDate = date => {
     const today = new Date();
     return date.getTime() > today.getTime();
 }
+
+// const hashedPassword = (password)
+
+
 
 
 module.exports = {
@@ -141,5 +164,5 @@ module.exports = {
     validateUsername,
     validatePassword,
     isFutureDate,
-    validateCCCDOrCMND
+    valdiateCCCD
 }

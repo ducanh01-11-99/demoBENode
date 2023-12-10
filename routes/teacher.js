@@ -5,7 +5,7 @@ const {getAll, gitListTDDT, getListWorkType, getListContractType, filterEmployee
 const {checkExistInTable} = require('../services/common.service');
 const {isValidUUID, genResponseBody} = require('../helper');
 const jwt = require('jsonwebtoken');
-const {addAndEditEmployee} = require('../controller/teacherController');
+const {addEmployee, editEmployee} = require('../controller/teacherController');
 
 router.get('/getAll', verifyToken, async function(req, res, next) {
     try {
@@ -170,14 +170,24 @@ router.post('/filter', verifyToken, async function(req, res, next) {
 });
 
 router.post('/addAndEdit', verifyToken, async function(req, res, next) {
-    const result =  await addAndEditEmployee(req);
+    const result =  await addEmployee(req);
+    console.log("result", result);
     if(result === '') {
         res.json(genResponseBody(0, {"data": result}, true));
     } else {
-        res.json(genResponseBody(0, {"data": result}, true));
+        res.json(genResponseBody(1, {"data": result}, false));
     }
 })
 
+router.put('/edit-employee', verifyToken, async function(req, res, next) {
+    const result =  await editEmployee(req.body);
+    console.log("result", result);
+    if(result === '') {
+        res.json(genResponseBody(0, {"data": result}, true));
+    } else {
+        res.json(genResponseBody(1, {"data": result}, false));
+    }
+})
 
 
 module.exports = router;

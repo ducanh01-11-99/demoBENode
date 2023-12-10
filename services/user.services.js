@@ -46,16 +46,6 @@ const getInfoAccount = async (username) => {
   return infoUser;
 };
 
-const checkExistMaCanBo = async (mcb) => {
-    const sql =  `SELECT * from nhan_vien where ma_so_nhan_vien = ?`;
-    const params = [mcb];
-    const list = await db.query(sql, params);
-    if(list.length > 0) {
-        return false;
-    } return true;
-
-}
-
 module.exports = {
-    getMultiple, addAndEditUser, getInfoAccount, checkExistMaCanBo
+    getMultiple, addAndEditUser, getInfoAccount
 }
