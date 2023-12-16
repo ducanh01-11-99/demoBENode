@@ -7,6 +7,10 @@ const config = {
         database: "demo",
         // insecureAuth : true
     },
-    listPerPage: 10,
+    emailConfig: {
+        user: 'ducanh20176919@gmail.com',
+        pass: 'zxlu nfxm sxef snic'
+    }
+
 };
 module.exports = config;

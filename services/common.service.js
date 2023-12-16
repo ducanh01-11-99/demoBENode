@@ -83,13 +83,12 @@ const resetPasswordService = async(id) => {
         [id]
     );
     if(dataResponse.affectedRows > 0) {
-        console.log("12312");
         return 0;
     }
     return 1;
 }
 
-// Đặt lại mật khẩu
+// Lấy danh sách dân tộc
 const getListNation = async() => {
     const dataResponse = await db.query(
         `SELECT id, code, name from danh_muc_dan_toc`
@@ -97,4 +96,12 @@ const getListNation = async() => {
     return dataResponse;
 }
 
-module.exports = {checkExistInTable, checkExistProvinces, checkTonGiao, checkDanToc, resetPasswordService, getListNation};
+// Lấy danh sách tôn giáo
+const getListReligion = async() => {
+    const dataResponse = await db.query(
+        `SELECT TonGiaoID, TenTonGiao from danh_muc_ton_giao`
+    );
+    return dataResponse;
+}
+
+module.exports = {checkExistInTable, checkExistProvinces, checkTonGiao, checkDanToc, resetPasswordService, getListNation, getListReligion};

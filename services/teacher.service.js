@@ -190,6 +190,30 @@ const editEmployeService = async (body) => {
     return "OK"
 }
 
+const layMaTuTangService = async (id) => {
+    try {
+        const sql =  `SELECT * from config_gen_code where type = ?`;
+        const params = [id];
+        const list = await db.query(sql, params);
+        return list;
+    } catch(err) {
+        return -1;
+    }
+}
+
+const checkExistEmployeeService = async (id) => {
+    try {
+        const sql =  `SELECT * from nhan_vien where ma_so_nhan_vien = ?`;
+        const params = [id];
+        const list = await db.query(sql, params);
+        if(list.length > 0) {
+            return false;
+        } return true;
+    } catch(err) {
+        return false;
+    }
+}
+
 module.exports = {
     checkExistEmployeeCode,
     getAll,
@@ -202,5 +226,7 @@ module.exports = {
     checkToBoMon,
     addAndEdit,
     checkUsername,
-    editEmployeService
+    editEmployeService,
+    layMaTuTangService,
+    checkExistEmployeeService
 };

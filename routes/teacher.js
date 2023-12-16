@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const {verifyToken} = require('../middleware/authen');
-const {getAll, gitListTDDT, getListWorkType, getListContractType, filterEmployee} = require('../services/teacher.service');
+const {getAll, gitListTDDT, getListWorkType, getListContractType, filterEmployee, checkExistEmployeeService} = require('../services/teacher.service');
 const {checkExistInTable} = require('../services/common.service');
 const {isValidUUID, genResponseBody} = require('../helper');
 const jwt = require('jsonwebtoken');
-const {addEmployee, editEmployee, resetPassword} = require('../controller/teacherController');
+const {addEmployee, editEmployee, resetPassword, layMaTuTang, checkExist} = require('../controller/teacherController');
 
 router.get('/getAll', verifyToken, async function(req, res, next) {
     try {
@@ -198,6 +198,20 @@ router.get('/reset-password', verifyToken,async (req, res, next) => {
     } else {
         res.json(genResponseBody(1, {"data": "Có lỗi xảy ra"}, false));
     }
+});
+
+router.get('/ma-tu-tang', verifyToken, async (req, res, next) => {
+    const mtt = await layMaTuTang(1);
+    if(mtt === -1) {
+        res.json(genResponseBody(1, {"data": "Có lỗi xảy ra!"}, false)); 
+    }
+    res.json(genResponseBody(1, {"data": mtt}, false));
+})
+
+router.get('/check-exist', verifyToken, async (req, res, next) => {
+    const id = req.query.id;
+    const result = await checkExistEmployeeService(id);
+    res.json(genResponseBody(0, result, true));
 })
 
 

@@ -4,7 +4,7 @@ const {getListProvinces, getListDistrict, getListWard, getListArea, getYearKey, 
 const { genResponseBody } = require('../helper');
 const {verifyToken} = require('../middleware/authen');
 
-const {getListNation} = require('../services/common.service');
+const {getListNation, getListReligion} = require('../services/common.service');
 
 router.get('/provinces', verifyToken, async function(req, res, next) {
     try {
@@ -91,11 +91,21 @@ router.get('/provinces', verifyToken, async function(req, res, next) {
      // Láy danh sách Loại trường
      router.get('/dan-toc', verifyToken, async (req, res, next) => {
       try {
-        console.log(1);
         const list = await getListNation();
         res.json(genResponseBody(0, list, true));
       } catch (err) {
         console.error(`Error while getting list nation `, err.message);
+        next(err);
+      }
+    })
+
+    // Lấy danh sách dân tộc
+    router.get('/ton-giao', verifyToken, async (req, res, next) => {
+      try {
+        const list = await getListReligion();
+        res.json(genResponseBody(0, list, true));
+      } catch (err) {
+        console.error(`Error while getting list religion `, err.message);
         next(err);
       }
     })
